@@ -59,6 +59,20 @@ export default function Home() {
     setLoading(false);
   };
 
+  const resetPw = async () => {
+  setToast("");
+  const e = email.trim();
+  if (!e) return setToast("이메일 입력");
+
+  const { error } = await supabase.auth.resetPasswordForEmail(e, {
+    redirectTo: `${window.location.origin}/reset`,
+  });
+
+  if (error) setToast(error.message);
+  else setToast("비밀번호 재설정 메일 전송함.");
+};
+
+
   const signup = async () => {
     setLoading(true);
     setToast("");
@@ -84,7 +98,7 @@ export default function Home() {
     if (uid) await upsertProfile(uid, nickname.trim());
 
     // 이메일 확인을 켜놨으면 바로 로그인 안 될 수도 있음. (Supabase Auth 설정 따라 다름)
-    setToast("가입 완료. 로그인 화면으로 가서 로그인해라(설정에 따라 이메일 확인이 필요할 수 있음).");
+    setToast("가입 완료. 로그인 화면으로 가서 로그인 하면 됨.(설정에 따라 이메일 확인이 필요할 수 있음).");
     setMode("login");
     setLoading(false);
   };
@@ -167,6 +181,13 @@ export default function Home() {
             <button className="btn btnBlue" style={{ width: "100%" }} onClick={mode === "login" ? login : signup} disabled={loading}>
               {loading ? "처리 중" : mode === "login" ? "로그인" : "회원가입"}
             </button>
+
+            {mode === "login" && (
+  <button className="btn btnGhost" style={{ width: "100%", marginTop: 10 }} onClick={resetPw}>
+    비밀번호 재설정 메일 보내기
+  </button>
+)}
+
 
             <div style={{ height: 12 }} />
 
