@@ -16,11 +16,13 @@ type SessionRow = {
   created_at: string;
 };
 
+// 조인 결과는 상황에 따라 profiles가 null/객체/배열처럼 보일 때도 있어서
+// 타입을 빡세게 잡으면 배포 빌드에서 터짐. 널널하게 처리.
 type MemberRow = {
   session_id: string;
   user_id: string;
   role: "host" | "member" | string;
-  profiles?: { nickname: string } | null;
+  profiles?: any; // <- 여기 핵심
 };
 
 type SortMode = "soon" | "late" | "newest";
@@ -36,10 +38,9 @@ export default function SessionsPage() {
   const [purposeFilter, setPurposeFilter] = useState<"all" | string>("all");
   const [sortMode, setSortMode] = useState<SortMode>("soon");
 
-  // 생성 폼(최소)
-  const [title, setTitle] = useState("제목");
-  const [purpose, setPurpose] = useState("타이틀");
-  const [placeText, setPlaceText] = useState("장소 입력");
+  const [title, setTitle] = useState("같이 카페에서 공부");
+  const [purpose, setPurpose] = useState("카페공부");
+  const [placeText, setPlaceText] = useState("공공장소(역/카페/서점 등)");
   const [capacity, setCapacity] = useState(2);
 
   const [startAt, setStartAt] = useState(() => toLocalInput(new Date(Date.now() + 60 * 60 * 1000)));
@@ -70,13 +71,14 @@ export default function SessionsPage() {
     if (sErr) alert(sErr.message);
     setRows((sData ?? []) as SessionRow[]);
 
-    // 참가자 + 닉네임 조인
     const { data: mData, error: mErr } = await supabase
       .from("session_members")
       .select("session_id,user_id,role,profiles(nickname)");
 
     if (mErr) alert(mErr.message);
-    setMembers((mData ?? []) as MemberRow[]);
+
+    // TS가 조인 타입을 못 맞춰서 빌드 막는 걸 피하려고 unknown 거친다
+    setMembers(((mData ?? []) as unknown) as MemberRow[]);
 
     setLoading(false);
   };
@@ -84,16 +86,24 @@ export default function SessionsPage() {
   const memberCount = (sessionId: string) => members.filter((m) => m.session_id === sessionId).length;
   const iJoined = (sessionId: string) => !!me && members.some((m) => m.session_id === sessionId && m.user_id === me);
 
+  const getNickname = (m: MemberRow) => {
+    const p = m.profiles;
+    if (!p) return "익명";
+    if (Array.isArray(p)) return p?.[0]?.nickname ?? "익명";
+    if (typeof p === "object") return p.nickname ?? "익명";
+    return "익명";
+  };
+
   const memberNicknames = (sessionId: string) => {
     const list = members
       .filter((m) => m.session_id === sessionId)
       .map((m) => ({
+        session_id: m.session_id,
         user_id: m.user_id,
         role: m.role,
-        nickname: m.profiles?.nickname ?? "익명",
+        nickname: getNickname(m),
       }));
 
-    // host 먼저
     list.sort((a, b) => (a.role === "host" ? -1 : 1) - (b.role === "host" ? -1 : 1));
     return list;
   };
