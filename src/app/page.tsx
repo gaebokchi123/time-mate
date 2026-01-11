@@ -102,7 +102,7 @@ export default function Home() {
       <div className="topbar">
         <div className="topbarInner">
           <div className="brand">타임메이트</div>
-          <div className="pill">인스타 느낌으로 가는 중</div>
+          <div className="pill">Beta</div>
         </div>
       </div>
 
@@ -114,7 +114,7 @@ export default function Home() {
                 <h2 className="sectionTitle" style={{ marginBottom: 6 }}>
                   {title}
                 </h2>
-                <div className="muted small">이메일/비번으로 간단히</div>
+                <div className="muted small">이메일/비밀번호 입력</div>
               </div>
 
               <button
@@ -175,7 +175,7 @@ export default function Home() {
             <div style={{ height: 10 }} />
 
             <div className="muted small">
-              로그인 유지? supabase가 브라우저에 세션을 저장해서 탭 닫아도 유지됨. 로그아웃하면 해제됨.
+              자동 로그인 유지됨.
             </div>
           </div>
         </div>
