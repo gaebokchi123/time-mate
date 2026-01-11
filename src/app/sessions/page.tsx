@@ -38,9 +38,9 @@ export default function SessionsPage() {
   const [purposeFilter, setPurposeFilter] = useState<"all" | string>("all");
   const [sortMode, setSortMode] = useState<SortMode>("soon");
 
-  const [title, setTitle] = useState("같이 카페에서 공부");
-  const [purpose, setPurpose] = useState("카페공부");
-  const [placeText, setPlaceText] = useState("공공장소(역/카페/서점 등)");
+  const [title, setTitle] = useState("");
+  const [purpose, setPurpose] = useState("");
+  const [placeText, setPlaceText] = useState("");
   const [capacity, setCapacity] = useState(2);
 
   const [startAt, setStartAt] = useState(() => toLocalInput(new Date(Date.now() + 60 * 60 * 1000)));
@@ -254,9 +254,18 @@ export default function SessionsPage() {
         <div style={{ fontWeight: 700, marginBottom: 10 }}>세션 만들기</div>
 
         <div style={{ display: "grid", gap: 8 }}>
-          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="제목" style={inp} />
+          <input
+  value={title}
+  onChange={(e) => setTitle(e.target.value)}
+  placeholder="제목"
+/>
+
           <div style={{ display: "flex", gap: 8 }}>
-            <input value={purpose} onChange={(e) => setPurpose(e.target.value)} placeholder="목적(예: 카페공부)" style={{ ...inp, flex: 1 }} />
+            <input
+  value={purpose}
+  onChange={(e) => setPurpose(e.target.value)}
+  placeholder="테마"
+/>
             <input
               type="number"
               value={capacity}
@@ -266,7 +275,11 @@ export default function SessionsPage() {
               style={{ ...inp, width: 120 }}
             />
           </div>
-          <input value={placeText} onChange={(e) => setPlaceText(e.target.value)} placeholder="장소(공공장소 텍스트)" style={inp} />
+          <input
+  value={placeText}
+  onChange={(e) => setPlaceText(e.target.value)}
+  placeholder="장소 입력"
+/>
           <div style={{ display: "flex", gap: 8 }}>
             <input type="datetime-local" value={startAt} onChange={(e) => setStartAt(e.target.value)} style={{ ...inp, flex: 1 }} />
             <input type="datetime-local" value={endAt} onChange={(e) => setEndAt(e.target.value)} style={{ ...inp, flex: 1 }} />
