@@ -219,7 +219,16 @@ export default function SessionsPage() {
   }, [rows, members, me, mineOnly, purposeFilter, sortMode]);
 
   return (
-    <main style={{ maxWidth: 820, margin: "60px auto", padding: 16 }}>
+    <main
+  style={{
+    maxWidth: 920,
+    margin: "40px auto",
+    padding: 16,
+    fontFamily:
+      'ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"',
+  }}
+>
+
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
         <h2 style={{ margin: 0 }}>Sessions</h2>
 
@@ -244,13 +253,24 @@ export default function SessionsPage() {
             <option value="newest">최신 생성순</option>
           </select>
 
-          <button onClick={logout} style={{ padding: 10 }}>
-            로그아웃
-          </button>
+          <button onClick={logout} style={btnGhost}>
+  로그아웃
+</button>
+
         </div>
       </div>
 
-      <div style={{ border: "1px solid #ddd", borderRadius: 10, padding: 14, marginTop: 12 }}>
+      <div
+  style={{
+    border: "1px solid #e5e7eb",
+    borderRadius: 16,
+    padding: 16,
+    marginTop: 14,
+    background: "#fff",
+    boxShadow: "0 8px 30px rgba(0,0,0,0.06)",
+  }}
+>
+
         <div style={{ fontWeight: 700, marginBottom: 10 }}>세션 만들기</div>
 
         <div style={{ display: "grid", gap: 8 }}>
@@ -284,9 +304,10 @@ export default function SessionsPage() {
             <input type="datetime-local" value={startAt} onChange={(e) => setStartAt(e.target.value)} style={{ ...inp, flex: 1 }} />
             <input type="datetime-local" value={endAt} onChange={(e) => setEndAt(e.target.value)} style={{ ...inp, flex: 1 }} />
           </div>
-          <button onClick={createSession} style={{ padding: 12 }}>
-            생성
-          </button>
+          <button onClick={createSession} style={btn}>
+  생성
+</button>
+
         </div>
       </div>
 
@@ -365,10 +386,34 @@ export default function SessionsPage() {
 
 const inp: React.CSSProperties = {
   width: "100%",
-  padding: 10,
-  borderRadius: 8,
-  border: "1px solid #ddd",
+  padding: "12px 14px",
+  borderRadius: 12,
+  border: "1px solid #e5e7eb",
+  outline: "none",
+  background: "#fff",
+  fontSize: 14,
 };
+
+const btn: React.CSSProperties = {
+  padding: "12px 14px",
+  borderRadius: 12,
+  border: "1px solid #e5e7eb",
+  background: "#111827",
+  color: "#fff",
+  fontWeight: 700,
+  cursor: "pointer",
+};
+
+const btnGhost: React.CSSProperties = {
+  padding: "12px 14px",
+  borderRadius: 12,
+  border: "1px solid #e5e7eb",
+  background: "#fff",
+  color: "#111827",
+  fontWeight: 700,
+  cursor: "pointer",
+};
+
 
 function fmt(iso: string) {
   const d = new Date(iso);
