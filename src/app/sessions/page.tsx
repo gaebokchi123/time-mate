@@ -147,8 +147,7 @@ export default function SessionsPage() {
 
     const { data } = await supabase.auth.getSession();
     const uid = data.session?.user.id ?? null;
-    alert("지금 로그인 uid: " + uid);
-console.log("uid:", uid);
+   
 
     if (!uid) return setToast("로그인부터");
 
